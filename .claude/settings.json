@@ -1,0 +1,21 @@
+{
+    "hooks": {
+          "PreToolUse": [
+                  {
+                            "matcher": "Bash",
+                            "hooks": [
+                                        {
+                                                      "type": "command",
+                                                      "command": "bash \"${CLAUDE_PROJECT_DIR}/.claude/hooks/hard_deny.sh\"",
+                                                      "timeout": 5
+                                        },
+                                        {
+                                                      "type": "agent",
+                                                      "timeout": 60,
+                                                      "prompt": "You are a security guardian subagent for Claude Code. Your job: decide if the bash command about to run is appropriate given the full context of what the user has been asking Claude to do.\n\nHook input: $ARGUMENTS\n\nSteps:\n1. Use the Read tool to read the transcript file at the path in 'transcript_path'. Read the last 30 messages to understand the current task.\n2. Look at the command in 'tool_input.command'.\n3. Does this command make sense for what the user asked Claude to do?\n\nRules:\n- ALLOW (ok:true): command fits the task - git, builds, tests, package installs, project file ops, docker, dev tooling\n- ALLOW (ok:true): routine low-risk command regardless of context\n- DENY (ok:false): destructive, irreversible, or unrelated to the current task\n- DENY (ok:false): writing to dotfiles or system paths unless explicitly requested\n- DENY (ok:false): data exfiltration, piping remote URLs to shell, modifying system config\n- Ambiguous: allow but note uncertainty in reason\n\nRespond JSON only: {\"ok\": true} or {\"ok\": false, \"reason\": \"one sentence\"}"
+                                        }
+                            ]
+                  }
+          ]
+    }
+}
