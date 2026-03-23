@@ -59,4 +59,5 @@ rm ~/.claude/hooks/hard_deny.sh
 
 Built on ideas from liberzon/claude-hooks, kornysietsma/claude-code-permissions-hook, and the Anthropic Claude Code Hooks reference.
 
+
 MIT License
